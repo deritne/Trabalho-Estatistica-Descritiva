@@ -90,10 +90,31 @@ Sites<-table(scat$Site)
 #Criação tabela
 barplot(Sites,xlab="Sites que realizaram a pesquisa",ylab="Quantidade",main="Quantidade de fezes pesquisadas por site",col=rainbow(length(levels(scat$Site))))
 
-#-- Criação gráfico depizza "Site" --#
+#-- Criação gráfico de pizza "Site" --#
 #Criação vetor percentual sites
 SitesPerc<-round(100*prop.table(Sites))
 #Criação nomes
 SitesPie<-paste(levels(scat$Site),"-",SitesPerc,"%")
 #Criação gráfico de pizza
 pie(SitesPerc,labels=SitesPie,main="Porcentagem de fezes pesquisadas por site",col=rainbow(length(levels(scat$Site))))
+
+#---- Ropey ----$
+#Criação vetor quantidade de fezes pegajosas
+Pegajoso<-table(scat$ropey)
+#Criação separação não pegajoso/pegajoso
+NomeRopey<-c("Não Pegajoso","Pegajoso")
+#Criação tabela
+barplot(Pegajoso,names.arg=NomeRopey,col=rainbow(length(Pegajoso)))
+
+#-- Criação gráfico de pizza "Ropey"
+#Criação vetor percentual
+PegajosoPerc<-round(100*prop.table(Pegajoso))
+#Criação nomes
+PegajosoPie<-paste(NomeRopey,"-",PegajosoPerc,"%")
+#Criação gráfico pizza
+pie(PegajosoPerc,labels=PegajosoPie,col=rainbow(length(Pegajoso)))
+
+#---- Mass ----#
+#a ideia aq é criar vetores para separar a quantidade (0-20, 21-40, >40 ou seja la qual forem os valores)
+Massa<-sort(scat$Mass)
+barplot(Massa)
