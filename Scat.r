@@ -25,15 +25,18 @@ ValorCorte<-0
 nomeEspecies<-c("Lince","Coiote","Raposa_Cinza")
 #Substituição nome "Species"
 levels(scat$Species)<-nomeEspecies
-#Criando vetor numerico que recebe quantos animais tem de cada especie
+#Criando vetor numerico que recebe quantos animais tem de cada especie/Ano
 Especies<-table(scat$Species,scat$Year)
 #Criação gráfico de barra "Species" onde se denomina quantas fezes de cada animal foram coletadas
-barplot(Especies,beside=TRUE,main="Quantidade de fezes coletadas por animal em seus respectivos anos",xlab="Anos",ylab="Quantidade",legend.text=levels(scat$Species),
+barplot(Especies,beside=TRUE,main="Quantidade de fezes coletadas por animal em seus respectivos anos",
+        xlab="Anos",ylab="Quantidade",legend.text=levels(scat$Species),
         col=rainbow(length(levels(scat$Species))))
 
 #-- Criação gráfico de pizza "Species" --#
+#Criando vetor numerico que recebe quantos animais tem de cada especie
+EspeciesNum<-table(scat$Species)
 #Criação data percentual
-EspeciesPerc<-round(100*prop.table(Especies),2)
+EspeciesPerc<-round(100*prop.table(EspeciesNum),2)
 #Criação nome para incluir no gráfico de pizza
 EspeciesPie<-paste(nomeEspecies,"-",EspeciesPerc,"%")
 #Criação tabela de pizza onde se denomina a porcentagem dos animais que tiveram suas fezes coletadas
@@ -41,8 +44,6 @@ pie(EspeciesPerc,label=EspeciesPie,main="Porcentagem dos animais que tiveram sua
 
 
 #---- Month ----#
-#Tradução Meses
-
 #Criação novos nomes
 nomeMeses<-c("Abril","Agosto","Fevereiro","Janeiro","Junho","Maio","Novembro","Outubro","Setembro")
 #Substituição nome "Month"
@@ -67,7 +68,7 @@ pie(MesesPerc,label=MesesPie,main="Porcentagem dos meses em que as fezes foram c
 #Tradução localização
 
 #Criação novos nomes
-NomeLocal<-c("Borda","Meio","Fora da borda")
+NomeLocal<-c("Borda da costa da California","Meio da costa da California","Fora da borda da costa da California")
 #Substituição nome "Location"
 levels(scat$Location)<-NomeLocal
 #Vetor númerico que define a quantidade de fezes que foram coletadas por local
@@ -81,7 +82,7 @@ LocaisPerc<-round(100*prop.table(Locais),2)
 #Criação nomes
 LocaisPie<-paste(NomeLocal,"-",LocaisPerc,"%")
 #Criação tabela de pizza onde se demonstra a porcentagem de quais locais as fezes foram coletadas
-pie(LocaisPerc,label=LocaisPie,main="Porcentagem dos locais em que as fezes foram coletadas",col=rainbow(length(Locais)))
+pie(LocaisPerc,label=LocaisPie,main="Em quais locais as fezes foram mais coletadas",col=rainbow(length(Locais)))
 
 
 #---- Site ----#
@@ -91,6 +92,8 @@ Sites<-table(scat$Site)
 barplot(Sites,xlab="Sites que realizaram a pesquisa",ylab="Quantidade",main="Quantidade de fezes pesquisadas por site",col=rainbow(length(levels(scat$Site))))
 
 #-- Criação gráfico de pizza "Site" --#
+#Criação vetor quantidade de pesquisas que cada site fez
+Sites<-table(scat$Site)
 #Criação vetor percentual sites
 SitesPerc<-round(100*prop.table(Sites))
 #Criação nomes
@@ -107,14 +110,40 @@ NomeRopey<-c("Não Pegajoso","Pegajoso")
 barplot(Pegajoso,names.arg=NomeRopey,col=rainbow(length(Pegajoso)))
 
 #-- Criação gráfico de pizza "Ropey"
+#Criação vetor quantidade aspecto das fezes
+Pegajoso<-table(scat$ropey)
+#Criação separação não pegajoso/pegajoso
+NomeRopey<-c("Não Pegajosa","Pegajosa")
 #Criação vetor percentual
 PegajosoPerc<-round(100*prop.table(Pegajoso))
 #Criação nomes
 PegajosoPie<-paste(NomeRopey,"-",PegajosoPerc,"%")
 #Criação gráfico pizza
-pie(PegajosoPerc,labels=PegajosoPie,col=rainbow(length(Pegajoso)))
+pie(PegajosoPerc,main="Aspecto das fezes",labels=PegajosoPie,col=rainbow(length(Pegajoso)))
 
 #---- Mass ----#
-#a ideia aq é criar vetores para separar a quantidade (0-20, 21-40, >40 ou seja la qual forem os valores)
-Massa<-sort(scat$Mass)
-barplot(Massa)
+#Filtrando ocorrências
+dadosgraf05 <- data.frame(subset(scat, scat$Mass >= 0 & scat$Mass <= 5))[12:12] #Separando ocorrências da massa entre x e x
+
+dadosgraf50 <- data.frame(subset(scat, scat$Mass >= 5 & scat$Mass <= 10))[12:12]
+
+dadosgraf1015 <- data.frame(subset(scat, scat$Mass >= 10 & scat$Mass <= 15))[12:12]
+
+dadosgraf1520 <- data.frame(subset(scat, scat$Mass >= 15 & scat$Mass <= 20))[12:12]
+
+dadosgraf2025 <- data.frame(subset(scat, scat$Mass >= 20 & scat$Mass <= 25))[12:12]
+
+dadosgraf2530 <- data.frame(subset(scat, scat$Mass >= 25 & scat$Mass <= 30))[12:12]
+
+dadosgrafacima30 <- data.frame(subset(scat, scat$Mass >= 30))[12:12]
+
+#Unindo valores
+dadosgrafico<-c(nrow(dadosgraf05),nrow(dadosgraf50),nrow(dadosgraf1015),nrow(dadosgraf1520),nrow(dadosgraf2025),
+                nrow(dadosgraf2530),nrow(dadosgrafacima30))
+
+#Criação ocorrências para legenda
+OcorrFez<-c("0 a 5","5 a 10","10 a 15","15 a 20","20 a 25","25 a 30","30+")
+#Criação tabela ocorrências de fezes por massa
+barplot(dadosgrafico,legend.text=OccorFez,ylab="Quantidade de fezes com x libras",
+        main="Ocorrência de fezes em libras",col=rainbow(length(dadosgrafico)),names.arg=teste)
+
