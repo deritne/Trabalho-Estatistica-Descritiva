@@ -142,8 +142,8 @@ dadosgrafico<-c(nrow(dadosgraf05),nrow(dadosgraf50),nrow(dadosgraf1015),nrow(dad
                 nrow(dadosgraf2530),nrow(dadosgrafacima30))
 
 #Criação ocorrências para legenda
-OcorrFez<-c("0 a 5","5 a 10","10 a 15","15 a 20","20 a 25","25 a 30","30+")
+OccorFez<-c("0 a 5","5 a 10","10 a 15","15 a 20","20 a 25","25 a 30","30+")
 #Criação tabela ocorrências de fezes por massa
 barplot(dadosgrafico,legend.text=OccorFez,ylab="Quantidade de fezes com x libras",
-        main="Ocorrência de fezes em libras",col=rainbow(length(dadosgrafico)),names.arg=teste)
+        main="Ocorrência de fezes em libras",col=rainbow(length(dadosgrafico)),names.arg=OccorFez)
 
